@@ -1,4 +1,4 @@
-# Exp-4--Mux-Demux
+# Exp-4-Mux-Demux
 # Design and Verification of 2:1 Multiplexer and Demultiplexer
 ## Aim
 To design and verify a 2:1 Multiplexer and a 1:2 Demultiplexer using Verilog HDL.
