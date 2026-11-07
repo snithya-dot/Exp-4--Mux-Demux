@@ -12,24 +12,93 @@ Boolean Functions
 •	Y1 = S.D
 ## Files to be Created
 
-<img width="575" height="65" alt="image" src="https://github.com/user-attachments/assets/04c2d90c-0b6b-4b35-b603-d0e10e1e4f00" />
+<img width="851" height="131" alt="image" src="https://github.com/user-attachments/assets/6f2d7e2d-c287-4174-b93b-4e4b33d4544d" />
+
 
 ## Design / RTL Program
+module mux2to1 (
+    input  wire A,      // input line 0
+    input  wire B,      // input line 1
+    input  wire S,      // select line
+    output wire Y       // output
+);
+    assign Y = (~S & A) | (S & B);
+endmodule
+ 
+module demux1to2 (
+    input  wire D,      // data input
+    input  wire S,      // select line
+    output wire Y0,     // output line 0
+    output wire Y1      // output line 1
+);
+    assign Y0 = (~S) & D;
+    assign Y1 = S & D;
+endmodule
 
-```
+
+
 ## **Testbench Program
+module tb4;
+    reg  A, B, S, D;
+    wire Y;
+    wire Y0, Y1;
+ 
+    // Instantiate the 2:1 Multiplexer
+    mux2to1 mux_uut (
+        .A(A),
+        .B(B),
+        .S(S),
+        .Y(Y)
+    );
+ 
+    // Instantiate the 1:2 Demultiplexer
+    demux1to2 demux_uut (
+        .D(D),
+        .S(S),
+        .Y0(Y0),
+        .Y1(Y1)
+    );
+ 
+    initial begin
+        // ---- VCD dump setup ----
+        $dumpfile("mux_demux.vcd");   // name of the VCD file to be generated
+        $dumpvars(0, tb4);             // dump all signals in this testbench hierarchy
+ 
+        // ---- Apply all input combinations ----
+        $monitor("Time=%0t S=%b A=%b B=%b Y=%b | D=%b Y0=%b Y1=%b",
+                  $time, S, A, B, Y, D, Y0, Y1);
+ 
+        // MUX select = 0 -> Y should follow A
+        S = 0; A = 0; B = 0; D = 0; #10;
+        S = 0; A = 0; B = 1; D = 1; #10;
+        S = 0; A = 1; B = 0; D = 1; #10;
+        S = 0; A = 1; B = 1; D = 0; #10;
+ 
+        // MUX select = 1 -> Y should follow B
+        S = 1; A = 0; B = 0; D = 0; #10;
+        S = 1; A = 0; B = 1; D = 1; #10;
+        S = 1; A = 1; B = 0; D = 1; #10;
+        S = 1; A = 1; B = 1; D = 0; #10;
+ 
+        #10 $finish;
+    end
+endmodule
+
 
 
 
 ## Truth Table
 
 ### 2:1 Multiplexer
+<img width="888" height="256" alt="image" src="https://github.com/user-attachments/assets/78e926ae-b1b9-4d22-a91b-062538ee4e58" />
 
-<img width="573" height="154" alt="image" src="https://github.com/user-attachments/assets/96dd3fa2-7747-402d-b88f-17c11e28fcbb" />
+
+
 
 ### 1:2 Demultiplexer
 
-<img width="583" height="90" alt="image" src="https://github.com/user-attachments/assets/4bc21b52-1db5-4302-afab-ebb0b9d5a74b" />
+<img width="926" height="157" alt="image" src="https://github.com/user-attachments/assets/0f43036e-d6fd-436c-8593-67d82623c862" />
+
 
 ## Simulation Procedure
 
@@ -84,27 +153,8 @@ The 2:1 Multiplexer and 1:2 Demultiplexer were realized using Verilog HDL:
 The design was compiled and simulated using Synopsys VCS, and the functionality was verified using DVE waveform analysis, matching the expected truth table.
 
 ## Output
-
-
-## Viva-Voce Questions
-
-•	What is a Multiplexer, and why is it called a 'data selector'?
-
-•	What is a Demultiplexer, and how does it differ functionally from a Multiplexer?
-
-•	How many select lines are required for an 8:1 MUX and a 1:8 DEMUX?
-
-•	Write the Boolean expression for a 4:1 Multiplexer.
-
-•	What is the purpose of a Verilog testbench?
-
-•	Why is a VCD file generated, and what does $dumpvars(0, tb) do?
-
-•	What is the purpose of ./simv?
-
-•	What is the difference between simulation and synthesis?
-
-•	How would you extend the 2:1 MUX design to a 4:1 MUX using two 2:1 MUXes?
+<img width="921" height="206" alt="image" src="https://github.com/user-attachments/assets/46dede64-e490-4040-8d92-788528e1244f" />
+<img width="903" height="198" alt="image" src="https://github.com/user-attachments/assets/969707aa-3be9-4e13-828c-6bd2e05ab478" />
 
 ## Result
 
